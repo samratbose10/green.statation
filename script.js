@@ -1,30 +1,39 @@
-async function findPlant() {
-    const locationInput = document.getElementById('locationInput').value.trim();
-    const resultDiv = document.getElementById('result');
+const plants = [
+    { name: "Rose", hint: "I am a beautiful flower, often associated with love and romance." },
+    { name: "Sunflower", hint: "I always face the sun and have bright yellow petals." },
+    { name: "Tulip", hint: "I am a bulbous plant, often found in gardens in the Netherlands." },
+    { name: "Cactus", hint: "I thrive in deserts and have spines instead of leaves." },
+    { name: "Bamboo", hint: "I grow very fast and am often used for building and decoration." },
 
-    if (!locationInput) {
-        resultDiv.textContent = "Please enter a location.";
-        return;
-    }
+];
 
-    const apiUrl = `https://openfarm.cc/api/v1/crops/?filter[location]=${locationInput}`;
+let currentPlant;
+let remainingAttempts;
 
-    try {
-        const response = await fetch(apiUrl);
-        const data = await response.json();
+function startGame() {
+    const randomIndex = Math.floor(Math.random() * plants.length);
+    currentPlant = plants[randomIndex];
+    remainingAttempts = 3;
 
-        if (data.data && data.data.length > 0) {
-            const plant = data.data[0];
-            resultDiv.innerHTML = `
-                <h2>${plant.attributes.name}</h2>
-                <p>Description: ${plant.attributes.description}</p>
-                <img src="${plant.attributes.image_url}" alt="${plant.attributes.name}" style="width: 200px; height: auto;">
-            `;
+    document.getElementById('hint').textContent = `Hint: ${currentPlant.hint}`;
+    document.getElementById('result').textContent = "";
+    document.getElementById('guessInput').value = "";
+}
+
+function checkGuess() {
+    const userGuess = document.getElementById('guessInput').value.trim();
+
+    if (userGuess.toLowerCase() === currentPlant.name.toLowerCase()) {
+        document.getElementById('result').textContent = `Congratulations! You guessed it right. The plant is ${currentPlant.name}.`;
+    } else {
+        remainingAttempts--;
+        if (remainingAttempts > 0) {
+            document.getElementById('result').textContent = `Incorrect! You have ${remainingAttempts} attempts left.`;
         } else {
-            resultDiv.textContent = `Sorry, we don't have information for ${locationInput}.`;
+            document.getElementById('result').textContent = `Sorry, you've run out of attempts. The correct answer was ${currentPlant.name}.`;
         }
-    } catch (error) {
-        resultDiv.textContent = "An error occurred while fetching data.";
-        console.error("Error fetching data:", error);
     }
 }
+
+
+window.onload = startGame;

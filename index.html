@@ -3,15 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Plant Finder</title>
+    <title>Plant Guessing Game</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
-        <h1>Find a Suitable Plant</h1>
-        <input type="text" id="locationInput" placeholder="Enter your country or state">
-        <button onclick="findPlant()">Find Plant</button>
-        <div id="result"></div>
+        <h1>Plant Guessing Game</h1>
+        <p id="hint"></p>
+        <input type="text" id="guessInput" placeholder="Enter your guess">
+        <button onclick="checkGuess()">Submit Guess</button>
+        <p id="result"></p>
+        <button onclick="startGame()">Start New Game</button>
     </div>
     <script src="script.js"></script>
 </body>
